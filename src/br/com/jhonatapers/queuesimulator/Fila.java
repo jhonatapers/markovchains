@@ -7,7 +7,9 @@ public class Fila {
 
     private int estadoAtual = 0;
 
-    Float[] estadosFila;
+    private Long perdas = 0L;
+
+    private Float[] estadosFila;
 
     public Fila(int c, int k) {
         this.c = c;
@@ -35,6 +37,14 @@ public class Fila {
 
     public Float[] getEstadosFila() {
         return estadosFila;
+    }
+
+    public void setPerdas(Long perdas) {
+        this.perdas = perdas;
+    }
+
+    public Long getPerdas() {
+        return perdas;
     }
 
 }

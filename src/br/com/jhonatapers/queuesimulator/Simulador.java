@@ -34,6 +34,8 @@ public class Simulador implements Runnable {
             if (fila.getEstadoAtual() <= fila.getC()) {
                 escalonador.agenda(geradorDeEventos.novoEvento(TipoEvento.SAIDA, tempoSimulacao));
             }
+        } else {
+            fila.setPerdas(fila.getPerdas() + 1);
         }
 
         escalonador.agenda(geradorDeEventos.novoEvento(TipoEvento.ENTRADA, tempoSimulacao));
