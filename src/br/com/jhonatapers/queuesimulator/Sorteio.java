@@ -35,4 +35,7 @@ public class Sorteio {
         return ((b - a) * random.nextRandom()) + a;
     }
 
+    public RandomGL getRandom() {
+        return random;
+    }
 }

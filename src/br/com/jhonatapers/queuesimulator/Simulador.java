@@ -2,7 +2,7 @@ package br.com.jhonatapers.queuesimulator;
 
 import java.util.concurrent.Semaphore;
 
-public class Simulador implements Runnable {
+public class Simulador {
 
     private Fila fila;
 
@@ -12,18 +12,14 @@ public class Simulador implements Runnable {
 
     private GeradorDeEventos geradorDeEventos;
 
-    private Semaphore mutex;
-
     private Long qtdSimulacoes;
 
     public Simulador(Fila fila, Float tempoSimulacao, Escalonador escalonador, GeradorDeEventos geradorDeEventos,
-            Semaphore mutex,
             Long qtdSimulacoes) {
         this.fila = fila;
         this.tempoSimulacao = tempoSimulacao;
         this.escalonador = escalonador;
         this.geradorDeEventos = geradorDeEventos;
-        this.mutex = mutex;
         this.qtdSimulacoes = qtdSimulacoes;
     }
 
@@ -54,7 +50,6 @@ public class Simulador implements Runnable {
         tempoSimulacao = evento.getInstanteEvento();
     }
 
-    @Override
     public void run() {
 
         Long count = 0L;
@@ -72,8 +67,6 @@ public class Simulador implements Runnable {
 
             count++;
         }
-
-        mutex.release();
 
     }
 
