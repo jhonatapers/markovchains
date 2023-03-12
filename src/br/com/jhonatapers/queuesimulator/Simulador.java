@@ -1,7 +1,5 @@
 package br.com.jhonatapers.queuesimulator;
 
-import java.util.concurrent.Semaphore;
-
 public class Simulador {
 
     private Fila fila;
