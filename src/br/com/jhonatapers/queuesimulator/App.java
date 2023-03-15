@@ -82,7 +82,7 @@ public class App {
         System.out.println(" ESTADO  |      TEMPO      |      PORCENTAGEM ");
         for (int i = 0; i < CAPACIDADE+1; i++) System.out.println(String.format("%s | %s | %s", alinharString(Integer.toString(i),8), alinharString(Float.toString(mediaEstados[i]),15), alinharString(Float.toString(mediaPorcentagem[i])+"%",20)));
 
-        System.out.println(String.format("\nPerdas: %s\n", perdas));
+        System.out.println(String.format("\nTempo de simulação: %s\nPerdas: %s\n", mediaTempo, perdas));
     }
 
     public static String alinharString(String inputString, int length) {
