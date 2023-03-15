@@ -1,9 +1,5 @@
 package br.com.jhonatapers.queuesimulator.util;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
-
 public class RandomGL {
 
     private final Long a = 104729L;
