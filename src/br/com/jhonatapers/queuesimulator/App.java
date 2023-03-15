@@ -14,7 +14,7 @@ public class App {
         int CAPACIDADE = 5;
         int SERVIDORES = 1;
         float PRIMEIRO_EVENTO = 3;
-        long QUANTIDADE_EXECUCOES = 15L;
+        long QUANTIDADE_EXECUCOES = 100000L;
         float TEMPO_MIN_CHEGADA = 2F;
         float TEMPO_MAX_CHEGADA = 4F;
         float TEMPO_MIN_SAIDA = 3F;
@@ -27,7 +27,7 @@ public class App {
         CAPACIDADE = 5;
         SERVIDORES = 2;
         PRIMEIRO_EVENTO = 3;
-        QUANTIDADE_EXECUCOES = 15L;
+        QUANTIDADE_EXECUCOES = 100000L;
         TEMPO_MIN_CHEGADA = 2F;
         TEMPO_MAX_CHEGADA = 4F;
         TEMPO_MIN_SAIDA = 3F;
