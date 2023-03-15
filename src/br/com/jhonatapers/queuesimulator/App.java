@@ -73,6 +73,7 @@ public class App {
             mediaTempo += simulador.tempoSimulacao;
         }
 
+        perdas = perdas / simuladores.size();
         mediaTempo = mediaTempo / simuladores.size();
 
         for (int i = 0; i < CAPACIDADE+1; i++) mediaPorcentagem[i] = (mediaEstados[i] / mediaTempo) * 100;
