@@ -1,136 +1,102 @@
 package br.com.jhonatapers.queuesimulator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import br.com.jhonatapers.queuesimulator.util.FiladePrioridadeMinima;
 import br.com.jhonatapers.queuesimulator.util.RandomGL;
 
 public class App {
     public static void main(String[] args) throws Exception {
 
+        //CASO 1
+        int EXECUCOES = 5;
+        int CAPACIDADE = 5;
+        int SERVIDORES = 1;
+        float PRIMEIRO_EVENTO = 3;
+        long QUANTIDADE_EXECUCOES = 15L;
+        float TEMPO_MIN_CHEGADA = 2F;
+        float TEMPO_MAX_CHEGADA = 4F;
+        float TEMPO_MIN_SAIDA = 3F;
+        float TEMPO_MAX_SAIDA = 5F;
+
+        simularMedia(EXECUCOES, CAPACIDADE, SERVIDORES, PRIMEIRO_EVENTO, QUANTIDADE_EXECUCOES, TEMPO_MIN_CHEGADA, TEMPO_MAX_CHEGADA, TEMPO_MIN_SAIDA, TEMPO_MAX_SAIDA);
+
+        //CASO 2
+        EXECUCOES = 5;
+        CAPACIDADE = 5;
+        SERVIDORES = 2;
+        PRIMEIRO_EVENTO = 3;
+        QUANTIDADE_EXECUCOES = 15L;
+        TEMPO_MIN_CHEGADA = 2F;
+        TEMPO_MAX_CHEGADA = 4F;
+        TEMPO_MIN_SAIDA = 3F;
+        TEMPO_MAX_SAIDA = 5F;
+
+        simularMedia(EXECUCOES, CAPACIDADE, SERVIDORES, PRIMEIRO_EVENTO, QUANTIDADE_EXECUCOES, TEMPO_MIN_CHEGADA, TEMPO_MAX_CHEGADA, TEMPO_MIN_SAIDA, TEMPO_MAX_SAIDA);
+
+    }
+
+    private static void simularMedia(int EXECUCOES, int CAPACIDADE, int SERVIDORES, float PRIMEIRO_EVENTO, long QUANTIDADE_EXECUCOES, float TEMPO_MIN_CHEGADA, float TEMPO_MAX_CHEGADA, float TEMPO_MIN_SAIDA, float TEMPO_MAX_SAIDA){
+
         RandomGL randomGL = new RandomGL();
 
-        Sorteio sorteio = new Sorteio(randomGL,
-                2F,
-                4F,
-                3F,
-                5F);
+        Sorteio sorteio = new Sorteio(randomGL, TEMPO_MIN_CHEGADA, TEMPO_MAX_CHEGADA, TEMPO_MIN_SAIDA, TEMPO_MAX_SAIDA);
 
         GeradorDeEventos geradorDeEventos = new GeradorDeEventos(sorteio);
 
         Escalonador escalonador;
 
-        Fila fila0_0 = new Fila(1, 5);
-        sorteio.getRandom().novaSeed(System.nanoTime());
-        escalonador = new Escalonador(new FiladePrioridadeMinima());
-        Simulador simulador0_0 = new Simulador(fila0_0, 3F, escalonador, geradorDeEventos, 100000L);
-        simulador0_0.run();
-        Fila fila0_1 = new Fila(1, 5);
-        sorteio.getRandom().novaSeed(System.nanoTime());
-        escalonador = new Escalonador(new FiladePrioridadeMinima());
-        Simulador simulador0_1 = new Simulador(fila0_1, 3F, escalonador, geradorDeEventos, 100000L);
-        simulador0_1.run();
-        Fila fila0_2 = new Fila(1, 5);
-        sorteio.getRandom().novaSeed(System.nanoTime());
-        escalonador = new Escalonador(new FiladePrioridadeMinima());
-        Simulador simulador0_2 = new Simulador(fila0_2, 3F, escalonador, geradorDeEventos, 100000L);
-        simulador0_2.run();
-        Fila fila0_3 = new Fila(1, 5);
-        sorteio.getRandom().novaSeed(System.nanoTime());
-        escalonador = new Escalonador(new FiladePrioridadeMinima());
-        Simulador simulador0_3 = new Simulador(fila0_3, 3F, escalonador, geradorDeEventos, 100000L);
-        simulador0_3.run();
-        Fila fila0_4 = new Fila(1, 5);
-        sorteio.getRandom().novaSeed(System.nanoTime());
-        escalonador = new Escalonador(new FiladePrioridadeMinima());
-        Simulador simulador0_4 = new Simulador(fila0_4, 3F, escalonador, geradorDeEventos, 100000L);
-        simulador0_4.run();
+        ArrayList<Simulador> simuladores = new ArrayList<Simulador>();
 
-        Float[] mediaEstados0 = new Float[6];
+        for (int i = 0; i < EXECUCOES; i++) {
+            Fila fila = new Fila(SERVIDORES, CAPACIDADE);
+            sorteio.getRandom().novaSeed(System.nanoTime());
+            escalonador = new Escalonador(new FiladePrioridadeMinima());
+            Simulador simulador = new Simulador(fila, PRIMEIRO_EVENTO, escalonador, geradorDeEventos, QUANTIDADE_EXECUCOES);
+            simulador.run();
+            
+            simuladores.add(simulador);
+        }
+        
 
-        for (int i = 0; i < mediaEstados0.length; i++)
-            mediaEstados0[i] = (fila0_0.getEstadosFila()[i] + fila0_1.getEstadosFila()[i] + fila0_2.getEstadosFila()[i]
-                    + fila0_3.getEstadosFila()[i] + fila0_4.getEstadosFila()[i]) / 5;
+        Float[] mediaEstados = new Float[CAPACIDADE+1];
+        Float[] mediaPorcentagem = new Float[CAPACIDADE+1];
+        Float mediaTempo = 0F;
+        Long perdas = 0L;
 
-        Float tempoSimulacao0 = 0F;
+        for (Simulador simulador : simuladores) {
+            for (int i = 0; i < CAPACIDADE+1; i++) {
+               mediaEstados[i] = mediaEstados[i] != null ? mediaEstados[i] : 0 + simulador.fila.getEstadosFila()[i]; 
+            }
+            perdas += simulador.fila.getPerdas();
+            mediaTempo += simulador.tempoSimulacao;
+        }
 
-        for (Float media : mediaEstados0)
-            tempoSimulacao0 += media;
+        mediaTempo = mediaTempo / simuladores.size();
 
-        Float[] porcentagemMediaEstados0 = new Float[6];
+        for (int i = 0; i < CAPACIDADE+1; i++) mediaPorcentagem[i] = (mediaEstados[i] / mediaTempo) * 100;
 
-        for (int i = 0; i < mediaEstados0.length; i++)
-            porcentagemMediaEstados0[i] = mediaEstados0[i] / tempoSimulacao0;
+        System.out.println(String.format("/// ------------ [ G/G/%s/%s ] ------------ ///\n", SERVIDORES, CAPACIDADE));
 
-        System.out.println("/// *Q(G/G/1/5)* ///");
+        System.out.println(" ESTADO  |      TEMPO      |      PORCENTAGEM ");
+        for (int i = 0; i < CAPACIDADE+1; i++) System.out.println(String.format("%s | %s | %s", alinharString(Integer.toString(i),8), alinharString(Float.toString(mediaEstados[i]),15), alinharString(Float.toString(mediaPorcentagem[i])+"%",20)));
 
-        for (int i = 0; i < mediaEstados0.length; i++)
-            System.out.println(String.format("Estado: %s;Tempo: %s;Porcentagem: %s%s", i, mediaEstados0[i],
-                    porcentagemMediaEstados0[i] * 100, "%"));
-
-        Long perdas0 = (fila0_0.getPerdas() + fila0_1.getPerdas() + fila0_2.getPerdas()
-                + fila0_3.getPerdas() + fila0_4.getPerdas()) / 5;
-
-        System.out.println(String.format("Perdas: %s", perdas0));
-
-        System.out.println("/// **************************************** ///");
-        System.out.println("/// **************************************** ///");
-        System.out.println("/// **************************************** ///");
-        System.out.println("/// **************************************** ///");
-        System.out.println("/// **************************************** ///");
-        System.out.println("/// **************************************** ///");
-        System.out.println("/// **************************************** ///");
-
-        Fila fila1_0 = new Fila(2, 5);
-        sorteio.getRandom().novaSeed(System.nanoTime());
-        escalonador = new Escalonador(new FiladePrioridadeMinima());
-        Simulador simulador1_0 = new Simulador(fila1_0, 3F, escalonador, geradorDeEventos, 100000L);
-        simulador1_0.run();
-        Fila fila1_1 = new Fila(2, 5);
-        sorteio.getRandom().novaSeed(System.nanoTime());
-        escalonador = new Escalonador(new FiladePrioridadeMinima());
-        Simulador simulador1_1 = new Simulador(fila1_1, 3F, escalonador, geradorDeEventos, 100000L);
-        simulador1_1.run();
-        Fila fila1_2 = new Fila(2, 5);
-        sorteio.getRandom().novaSeed(System.nanoTime());
-        escalonador = new Escalonador(new FiladePrioridadeMinima());
-        Simulador simulador1_2 = new Simulador(fila1_2, 3F, escalonador, geradorDeEventos, 100000L);
-        simulador1_2.run();
-        Fila fila1_3 = new Fila(2, 5);
-        sorteio.getRandom().novaSeed(System.nanoTime());
-        escalonador = new Escalonador(new FiladePrioridadeMinima());
-        Simulador simulador1_3 = new Simulador(fila1_3, 3F, escalonador, geradorDeEventos, 100000L);
-        simulador1_3.run();
-        Fila fila1_4 = new Fila(2, 5);
-        sorteio.getRandom().novaSeed(System.nanoTime());
-        escalonador = new Escalonador(new FiladePrioridadeMinima());
-        Simulador simulador1_4 = new Simulador(fila1_4, 3F, escalonador, geradorDeEventos, 100000L);
-        simulador1_4.run();
-
-        Float[] mediaEstados1 = new Float[6];
-
-        for (int i = 0; i < mediaEstados1.length; i++)
-            mediaEstados1[i] = (fila1_0.getEstadosFila()[i] + fila1_1.getEstadosFila()[i] + fila1_2.getEstadosFila()[i]
-                    + fila1_3.getEstadosFila()[i] + fila1_4.getEstadosFila()[i]) / 5;
-
-        Float tempoSimulacao1 = 0F;
-
-        for (Float media : mediaEstados1)
-            tempoSimulacao1 += media;
-
-        Float[] porcentagemmediaEstados1 = new Float[6];
-
-        for (int i = 0; i < mediaEstados1.length; i++)
-            porcentagemmediaEstados1[i] = mediaEstados1[i] / tempoSimulacao1;
-
-        System.out.println("/// *Q(G/G/2/5)* ///");
-
-        for (int i = 0; i < mediaEstados1.length; i++)
-            System.out.println(String.format("Estado: %s;Tempo: %s;Porcentagem: %s%s", i, mediaEstados1[i],
-                    porcentagemmediaEstados1[i] * 100, "%"));
-
-        Long perdas1 = (fila1_0.getPerdas() + fila1_1.getPerdas() + fila1_2.getPerdas()
-                + fila1_3.getPerdas() + fila1_4.getPerdas()) / 5;
-
-        System.out.println(String.format("Perdas: %s", perdas1));
-
+        System.out.println(String.format("\nPerdas: %s\n", perdas));
     }
+
+    public static String alinharString(String inputString, int length) {
+        if (inputString.length() >= length) {
+            return inputString;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(inputString);
+        while (sb.length() < length) {
+            sb.append(' ');
+        }
+        
+    
+        return sb.toString();
+    }
+
 }
