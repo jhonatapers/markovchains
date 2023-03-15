@@ -2,9 +2,9 @@ package br.com.jhonatapers.queuesimulator;
 
 public class Simulador {
 
-    private Fila fila;
+    public Fila fila;
 
-    private Float tempoSimulacao;
+    public Float tempoSimulacao;
 
     private Float instantePrimeiroEvento;
 

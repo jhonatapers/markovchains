@@ -1,5 +1,9 @@
 package br.com.jhonatapers.queuesimulator.util;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class RandomGL {
 
     private final Long a = 104729L;
@@ -27,6 +31,7 @@ public class RandomGL {
     }
 
     private Long random(Long seed) {
+
         this.seed = (a * seed + c) % M;
         return this.seed;
     }
