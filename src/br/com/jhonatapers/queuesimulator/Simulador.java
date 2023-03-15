@@ -6,16 +6,19 @@ public class Simulador {
 
     private Float tempoSimulacao;
 
+    private Float instantePrimeiroEvento;
+
     private Escalonador escalonador;
 
     private GeradorDeEventos geradorDeEventos;
 
     private Long qtdSimulacoes;
 
-    public Simulador(Fila fila, Float tempoSimulacao, Escalonador escalonador, GeradorDeEventos geradorDeEventos,
+    public Simulador(Fila fila, Float instantePrimeiroEvento, Escalonador escalonador, GeradorDeEventos geradorDeEventos,
             Long qtdSimulacoes) {
         this.fila = fila;
-        this.tempoSimulacao = tempoSimulacao;
+        this.tempoSimulacao = 0F;
+        this.instantePrimeiroEvento = instantePrimeiroEvento;
         this.escalonador = escalonador;
         this.geradorDeEventos = geradorDeEventos;
         this.qtdSimulacoes = qtdSimulacoes;
@@ -52,7 +55,7 @@ public class Simulador {
 
         Long count = 0L;
 
-        escalonador.agenda(geradorDeEventos.novoEvento(TipoEvento.ENTRADA, tempoSimulacao));
+        escalonador.agenda(new Evento(TipoEvento.ENTRADA, instantePrimeiroEvento));
 
         while (count < qtdSimulacoes) {
 
