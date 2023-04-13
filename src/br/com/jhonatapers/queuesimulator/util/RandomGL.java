@@ -18,11 +18,16 @@ public class RandomGL {
         this.seed = seed;
     }
 
+    public void novaSeed(Long seed) {
+        this.seed = seed;
+    }
+
     public Float nextRandom() {
         return Float.parseFloat(random(seed).toString()) / Float.parseFloat(M.toString());
     }
 
     private Long random(Long seed) {
+
         this.seed = (a * seed + c) % M;
         return this.seed;
     }

@@ -1,29 +1,26 @@
 package br.com.jhonatapers.queuesimulator;
 
-import java.util.concurrent.Semaphore;
+public class Simulador {
 
-public class Simulador implements Runnable {
+    public Fila fila;
 
-    private Fila fila;
+    public Float tempoSimulacao;
 
-    private Float tempoSimulacao;
+    private Float instantePrimeiroEvento;
 
     private Escalonador escalonador;
 
     private GeradorDeEventos geradorDeEventos;
 
-    private Semaphore mutex;
-
     private Long qtdSimulacoes;
 
-    public Simulador(Fila fila, Float tempoSimulacao, Escalonador escalonador, GeradorDeEventos geradorDeEventos,
-            Semaphore mutex,
+    public Simulador(Fila fila, Float instantePrimeiroEvento, Escalonador escalonador, GeradorDeEventos geradorDeEventos,
             Long qtdSimulacoes) {
         this.fila = fila;
-        this.tempoSimulacao = tempoSimulacao;
+        this.tempoSimulacao = 0F;
+        this.instantePrimeiroEvento = instantePrimeiroEvento;
         this.escalonador = escalonador;
         this.geradorDeEventos = geradorDeEventos;
-        this.mutex = mutex;
         this.qtdSimulacoes = qtdSimulacoes;
     }
 
@@ -54,12 +51,11 @@ public class Simulador implements Runnable {
         tempoSimulacao = evento.getInstanteEvento();
     }
 
-    @Override
     public void run() {
 
         Long count = 0L;
 
-        escalonador.agenda(geradorDeEventos.novoEvento(TipoEvento.ENTRADA, tempoSimulacao));
+        escalonador.agenda(new Evento(TipoEvento.ENTRADA, instantePrimeiroEvento));
 
         while (count < qtdSimulacoes) {
 
@@ -72,8 +68,6 @@ public class Simulador implements Runnable {
 
             count++;
         }
-
-        mutex.release();
 
     }
 
