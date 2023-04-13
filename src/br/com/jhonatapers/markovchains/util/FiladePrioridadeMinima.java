@@ -1,9 +1,9 @@
-package br.com.jhonatapers.queuesimulator.util;
+package br.com.jhonatapers.markovchains.util;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-import br.com.jhonatapers.queuesimulator.Evento;
+import br.com.jhonatapers.markovchains.Evento;
 
 public class FiladePrioridadeMinima {
 

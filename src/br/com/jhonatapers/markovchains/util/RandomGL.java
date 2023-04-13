@@ -1,4 +1,4 @@
-package br.com.jhonatapers.queuesimulator.util;
+package br.com.jhonatapers.markovchains.util;
 
 public class RandomGL {
 

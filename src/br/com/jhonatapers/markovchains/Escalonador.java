@@ -1,6 +1,6 @@
-package br.com.jhonatapers.queuesimulator;
+package br.com.jhonatapers.markovchains;
 
-import br.com.jhonatapers.queuesimulator.util.FiladePrioridadeMinima;
+import br.com.jhonatapers.markovchains.util.FiladePrioridadeMinima;
 
 public class Escalonador {
 

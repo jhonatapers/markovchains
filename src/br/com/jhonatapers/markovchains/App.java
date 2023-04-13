@@ -1,9 +1,9 @@
-package br.com.jhonatapers.queuesimulator;
+package br.com.jhonatapers.markovchains;
 
 import java.util.ArrayList;
 
-import br.com.jhonatapers.queuesimulator.util.FiladePrioridadeMinima;
-import br.com.jhonatapers.queuesimulator.util.RandomGL;
+import br.com.jhonatapers.markovchains.util.FiladePrioridadeMinima;
+import br.com.jhonatapers.markovchains.util.RandomGL;
 
 public class App {
     public static void main(String[] args) throws Exception {

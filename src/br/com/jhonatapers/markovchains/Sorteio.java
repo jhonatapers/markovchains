@@ -1,6 +1,6 @@
-package br.com.jhonatapers.queuesimulator;
+package br.com.jhonatapers.markovchains;
 
-import br.com.jhonatapers.queuesimulator.util.RandomGL;
+import br.com.jhonatapers.markovchains.util.RandomGL;
 
 public class Sorteio {
 

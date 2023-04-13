@@ -1,4 +1,4 @@
-package br.com.jhonatapers.queuesimulator;
+package br.com.jhonatapers.markovchains;
 
 public class GeradorDeEventos {
 
