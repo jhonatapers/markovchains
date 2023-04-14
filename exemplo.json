@@ -1,0 +1,69 @@
+{
+    "simulaoces": [
+        {
+            "media_de": 5,
+            "execucoes": 100000,
+            "filas": [
+                {
+                    "identificador": "FILA1",
+                    "servidores": 2,
+                    "capacidade": 4,
+                    "saida": {
+                        "minimo": 1,
+                        "maximo": 3
+                    },
+                    "entrada": {
+                        "minimo": 2,
+                        "maximo": 3
+                    },
+                    "transicoes": [
+                        {
+                            "probabilidade": 0.7,
+                            "destino": "FILA2"
+                        },
+                        {
+                            "probabilidade": 0.3,
+                            "destino": "FILA3"
+                        }
+                    ]
+                },
+                {
+                    "identificador": "FILA2",
+                    "servidores": 1,
+                    "capacidade": 3,
+                    "saida": {
+                        "minimo": 1,
+                        "maximo": 3
+                    },
+                    "entrada": {
+                        "minimo": 2,
+                        "maximo": 3
+                    },
+                    "transicoes": [
+                        {
+                            "probabilidade": 1
+                        }
+                    ]
+                },
+                {
+                    "identificador": "FILA3",
+                    "servidores": 1,
+                    "capacidade": 3,
+                    "saida": {
+                        "minimo": 1,
+                        "maximo": 3
+                    },
+                    "entrada": {
+                        "minimo": 2,
+                        "maximo": 3
+                    },
+                    "transicoes": [
+                        {
+                            "probabilidade": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
