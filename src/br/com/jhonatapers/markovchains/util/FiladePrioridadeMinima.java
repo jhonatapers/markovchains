@@ -3,7 +3,7 @@ package br.com.jhonatapers.markovchains.util;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-import br.com.jhonatapers.markovchains.Evento;
+import br.com.jhonatapers.markovchains.evento.Evento;
 
 public class FiladePrioridadeMinima {
 

@@ -1,20 +1,13 @@
-package br.com.jhonatapers.markovchains;
+package br.com.jhonatapers.markovchains.evento;
 
-public class Evento {
+public abstract class Evento {
 
-    private TipoEvento tipo;
-
-    private Float instanteEvento;
+    private final Float instanteEvento;
 
     private Float duracaoEvento;
 
-    public Evento(TipoEvento tipo, Float instanteEvento) {
-        this.tipo = tipo;
+    public Evento(Float instanteEvento) {
         this.instanteEvento = instanteEvento;
-    }
-
-    public TipoEvento getTipo() {
-        return tipo;
     }
 
     public Float getInstanteEvento() {

@@ -1,5 +1,6 @@
 package br.com.jhonatapers.markovchains;
 
+import br.com.jhonatapers.markovchains.evento.Evento;
 import br.com.jhonatapers.markovchains.util.FiladePrioridadeMinima;
 
 public class Escalonador {
