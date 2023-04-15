@@ -23,12 +23,12 @@ public class RandomGL {
     }
 
     public Float nextRandom() {
-        return Float.parseFloat(random(seed).toString()) / Float.parseFloat(M.toString());
+        return Float.parseFloat(random(seed).toString()) / Float.parseFloat(M.toString()) * 1;
     }
 
     private Long random(Long seed) {
         this.seed = (a * seed + c) % M;
-        return this.seed * 1;
+        return this.seed;
     }
 
 }
