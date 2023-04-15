@@ -18,7 +18,7 @@ public class App {
 
         LeitorConfiguracao leitor = new LeitorConfiguracao();
 
-        String fileName = "D:\\Local Workspace\\PUCRS\\Simulacao de metodos analiticos\\markovchains\\exemplo.json";
+        String fileName = "D:\\Local Workspace\\PUCRS\\Simulacao de metodos analiticos\\markovchains\\config.json";
         ConfigVO config = leitor.le(fileName);
 
         config.simulacoes()
