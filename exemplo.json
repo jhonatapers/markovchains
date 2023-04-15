@@ -1,5 +1,5 @@
 {
-    "simulaoces": [
+    "simulacoes": [
         {
             "media_de": 5,
             "execucoes": 100000,
@@ -33,10 +33,6 @@
                     "capacidade": 3,
                     "saida": {
                         "minimo": 1,
-                        "maximo": 3
-                    },
-                    "entrada": {
-                        "minimo": 2,
                         "maximo": 3
                     },
                     "transicoes": [

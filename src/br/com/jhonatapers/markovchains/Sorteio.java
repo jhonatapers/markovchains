@@ -31,16 +31,16 @@ public class Sorteio {
         // falta descobrir qual probabilidade vai acontecer
         Collections.sort(transicoes);
 
-        // 0.2
-        // 0.2
-        // 0.6
+        // 0.6 < 0.8 < 1.0
 
-        return Optional.empty();
+        Transicao achada = new Transicao(null, null);
+
+        return achada.getDestino();
 
     }
 
     public Float instante(IntervaloVO intervalo) {
-        return converte(intervalo.getMinimo(), intervalo.getMaximo(), random.nextRandom());
+        return converte(intervalo.minimo(), intervalo.maximo(), random.nextRandom());
     }
 
     // U(A, B) = (B – A) x U(0, 1) + A

@@ -1,112 +1,110 @@
 package br.com.jhonatapers.markovchains;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import br.com.jhonatapers.markovchains.estado.Fila;
+import br.com.jhonatapers.markovchains.evento.Entrada;
 import br.com.jhonatapers.markovchains.util.FiladePrioridadeMinima;
+import br.com.jhonatapers.markovchains.util.LeitorConfiguracao;
 import br.com.jhonatapers.markovchains.util.RandomGL;
+import br.com.jhonatapers.markovchains.vo.ConfigVO;
 
 public class App {
     public static void main(String[] args) throws Exception {
 
-        // CASO 1
-        int EXECUCOES = 5;
-        int CAPACIDADE = 5;
-        int SERVIDORES = 1;
-        float PRIMEIRO_EVENTO = 3;
-        long QUANTIDADE_EXECUCOES = 100000L;
-        float TEMPO_MIN_CHEGADA = 2F;
-        float TEMPO_MAX_CHEGADA = 4F;
-        float TEMPO_MIN_SAIDA = 3F;
-        float TEMPO_MAX_SAIDA = 5F;
+        LeitorConfiguracao leitor = new LeitorConfiguracao();
 
-        simularMedia(EXECUCOES, CAPACIDADE, SERVIDORES, PRIMEIRO_EVENTO, QUANTIDADE_EXECUCOES, TEMPO_MIN_CHEGADA,
-                TEMPO_MAX_CHEGADA, TEMPO_MIN_SAIDA, TEMPO_MAX_SAIDA);
+        String fileName = "X:\\PUCRS\\Simulacao de metodos analiticos\\markovchains\\exemplo.json";
+        ConfigVO config = leitor.le(fileName);
 
-        // CASO 2
-        EXECUCOES = 5;
-        CAPACIDADE = 5;
-        SERVIDORES = 2;
-        PRIMEIRO_EVENTO = 3;
-        QUANTIDADE_EXECUCOES = 100000L;
-        TEMPO_MIN_CHEGADA = 2F;
-        TEMPO_MAX_CHEGADA = 4F;
-        TEMPO_MIN_SAIDA = 3F;
-        TEMPO_MAX_SAIDA = 5F;
+        config.simulacoes()
+                .stream()
+                .forEach(simulacao -> {
 
-        simularMedia(EXECUCOES, CAPACIDADE, SERVIDORES, PRIMEIRO_EVENTO, QUANTIDADE_EXECUCOES, TEMPO_MIN_CHEGADA,
-                TEMPO_MAX_CHEGADA, TEMPO_MIN_SAIDA, TEMPO_MAX_SAIDA);
+                    Float tempoSimulacao = 0f;
+                    Collection<Collection<Fila>> listaDeListasDeFilas = new ArrayList<Collection<Fila>>();
+
+                    for (int i = 0; i < simulacao.media_de(); i++) {
+
+                        Set<Fila> filas = simulacao.filas()
+                                .stream()
+                                .map(fila -> new Fila(fila.identificador(),
+                                        fila.servidores(),
+                                        fila.capacidade(),
+                                        fila.saida(),
+                                        fila.entrada()))
+                                .collect(Collectors.toSet());
+
+                        filas.stream()
+                                .forEach(fila -> {
+
+                                    List<Transicao> transicoes = simulacao.filas()
+                                            .stream()
+                                            .filter(f -> f.identificador().equals(fila.getIdentificador()))
+                                            .findFirst()
+                                            .get()
+                                            .transicoes()
+                                            .stream()
+                                            .map(transicao -> new Transicao(transicao.probabilidade(), filas
+                                                    .stream()
+                                                    .filter(f -> f.getIdentificador().equals(transicao.destino()))
+                                                    .findFirst()))
+                                            .collect(Collectors.toList());
+
+                                    fila.setTransicoes(transicoes);
+                                });
+
+                        Collection<Entrada> entradas = simulacao.filas()
+                                .stream()
+                                .filter(fila -> fila.entrada() != null)
+                                .map(entrada -> new Entrada(entrada.entrada().minimo(),
+                                        filas.stream().filter(
+                                                fila -> fila.getIdentificador().equals(entrada.identificador()))
+                                                .findFirst().get()))
+                                .collect(Collectors.toList());
+
+                        Sorteio sorteio = new Sorteio(new RandomGL());
+
+                        Simulador simulador = new Simulador(filas,
+                                entradas,
+                                new Escalonador(new FiladePrioridadeMinima()),
+                                sorteio,
+                                new GeradorDeEventos(sorteio),
+                                simulacao.execucoes());
+
+                        simulador.run();
+
+                        listaDeListasDeFilas.add(filas);
+                        tempoSimulacao += simulador.getTempoSimulacao();
+                    }
+
+                    tempoSimulacao = 0f;
+                    listaDeListasDeFilas
+                            .stream()
+                            .forEach(listaDeFilas -> {
+                                listaDeFilas
+                                        .stream()
+                                        .forEach(fila -> {
+                                            System.out.println("--------------");
+                                            System.out.println(fila.getIdentificador());
+                                            System.out.println("--------------");
+
+                                            System.out.println(
+                                                    String.format("Perdas: %s", String.valueOf(fila.getPerdas())));
+
+                                            for (int i = 0; i < fila.getEstadosFila().length; i++) {
+                                                System.out.println(String.format("Estado %s -> %s min.", i,
+                                                        String.valueOf(fila.getEstadosFila()[i])));
+                                            }
+
+                                        });
+                            });
+
+                });
 
     }
-
-    private static void simularMedia(int EXECUCOES, int CAPACIDADE, int SERVIDORES, float PRIMEIRO_EVENTO,
-            long QUANTIDADE_EXECUCOES, float TEMPO_MIN_CHEGADA, float TEMPO_MAX_CHEGADA, float TEMPO_MIN_SAIDA,
-            float TEMPO_MAX_SAIDA) {
-
-        RandomGL randomGL = new RandomGL();
-
-        // Sorteio sorteio = new Sorteio(randomGL, TEMPO_MIN_CHEGADA, TEMPO_MAX_CHEGADA,
-        // TEMPO_MIN_SAIDA, TEMPO_MAX_SAIDA);
-
-        GeradorDeEventos geradorDeEventos;// = new GeradorDeEventos(sorteio);
-
-        Escalonador escalonador;
-
-        ArrayList<Simulador> simuladores = new ArrayList<Simulador>();
-
-        for (int i = 0; i < EXECUCOES; i++) {
-            // Fila fila = new Fila(SERVIDORES, CAPACIDADE);
-            // sorteio.getRandom().novaSeed(System.nanoTime());
-            // escalonador = new Escalonador(new FiladePrioridadeMinima());
-            // Simulador simulador = new Simulador(fila, PRIMEIRO_EVENTO, escalonador,
-            // geradorDeEventos, QUANTIDADE_EXECUCOES);
-            // simulador.run();
-
-            // simuladores.add(simulador);
-        }
-
-        Float[] mediaEstados = new Float[CAPACIDADE + 1];
-        Float[] mediaPorcentagem = new Float[CAPACIDADE + 1];
-        Float mediaTempo = 0F;
-        Long perdas = 0L;
-
-        for (Simulador simulador : simuladores) {
-            for (int i = 0; i < CAPACIDADE + 1; i++) {
-                // mediaEstados[i] = mediaEstados[i] != null ? mediaEstados[i] : 0 +
-                // simulador.fila.getEstadosFila()[i];
-            }
-            // perdas += simulador.fila.getPerdas();
-            mediaTempo += simulador.tempoSimulacao;
-        }
-
-        perdas = perdas / simuladores.size();
-        mediaTempo = mediaTempo / simuladores.size();
-
-        for (int i = 0; i < CAPACIDADE + 1; i++)
-            mediaPorcentagem[i] = (mediaEstados[i] / mediaTempo) * 100;
-
-        System.out.println(String.format("/// ------------ [ G/G/%s/%s ] ------------ ///\n", SERVIDORES, CAPACIDADE));
-
-        System.out.println(" ESTADO  |      TEMPO      |      PORCENTAGEM ");
-        for (int i = 0; i < CAPACIDADE + 1; i++)
-            System.out.println(String.format("%s | %s | %s", alinharString(Integer.toString(i), 8),
-                    alinharString(Float.toString(mediaEstados[i]), 15),
-                    alinharString(Float.toString(mediaPorcentagem[i]) + "%", 20)));
-
-        System.out.println(String.format("\nTempo de simulação: %s\nPerdas: %s\n", mediaTempo, perdas));
-    }
-
-    public static String alinharString(String inputString, int length) {
-        if (inputString.length() >= length) {
-            return inputString;
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.append(inputString);
-        while (sb.length() < length) {
-            sb.append(' ');
-        }
-
-        return sb.toString();
-    }
-
 }

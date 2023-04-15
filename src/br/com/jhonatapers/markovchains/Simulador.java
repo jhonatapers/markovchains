@@ -18,7 +18,7 @@ public class Simulador {
     private final GeradorDeEventos geradorDeEventos;
     private final Long qtdSimulacoes;
 
-    public Float tempoSimulacao;
+    private Float tempoSimulacao;
 
     public Simulador(Collection<Fila> filas,
             Collection<Entrada> entradasIniciais,
@@ -131,6 +131,10 @@ public class Simulador {
             count++;
         }
 
+    }
+
+    public Float getTempoSimulacao() {
+        return tempoSimulacao;
     }
 
 }

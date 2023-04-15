@@ -12,7 +12,7 @@ public class Fila {
     private final int k; // capacidade
     private final IntervaloVO intervaloEntrada;
     private final IntervaloVO intervaloSaida;
-    private final List<Transicao> transicoes;
+    private List<Transicao> transicoes;
 
     private int estadoAtual = 0;
     private Long perdas = 0L;
@@ -22,11 +22,9 @@ public class Fila {
             int c,
             int k,
             IntervaloVO saida,
-            IntervaloVO entrada,
-            List<Transicao> transicoes) {
+            IntervaloVO entrada) {
 
         this.identificador = identificador;
-        this.transicoes = transicoes;
         this.c = c;
         this.k = k;
         this.estadosFila = new Float[k + 1];
@@ -59,6 +57,10 @@ public class Fila {
 
     public List<Transicao> getTransicoes() {
         return transicoes;
+    }
+
+    public void setTransicoes(List<Transicao> transicoes) {
+        this.transicoes = transicoes;
     }
 
     public int getEstadoAtual() {
