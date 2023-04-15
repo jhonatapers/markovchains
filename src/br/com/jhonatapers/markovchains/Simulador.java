@@ -63,7 +63,7 @@ public class Simulador {
         if (passagem.getOrigem().getEstadoAtual() >= passagem.getOrigem().getK())
             agendaSaidaOuPassagem(passagem.getOrigem());
 
-        if (passagem.getDestino().getEstadoAtual() <= passagem.getDestino().getK()) {
+        if (passagem.getDestino().getEstadoAtual() < passagem.getDestino().getK()) {
             passagem.getDestino().estadoAtualMaisUm();
             if (passagem.getDestino().getEstadoAtual() <= passagem.getDestino().getC())
                 agendaSaidaOuPassagem(passagem.getDestino());
@@ -75,9 +75,6 @@ public class Simulador {
     private void saida(Saida saida) {
         contabilizaTempo(filas, saida.getInstanteEvento());
 
-        if (saida.getOrigem().getIdentificador().equals("FILA2"))
-            System.out.println("AHAM");
-
         saida.getOrigem().estadoAtualMenosUm();
         if (saida.getOrigem().getEstadoAtual() >= saida.getOrigem().getC())
             agendaSaidaOuPassagem(saida.getOrigem());
@@ -86,12 +83,8 @@ public class Simulador {
     private void agendaSaidaOuPassagem(Fila fila) {
         sorteio.proximaFila(fila.getTransicoes())
                 .ifPresentOrElse(
-                        (destino) -> {
-                            escalonador.agenda(geradorDeEventos.novaPassagem(tempoSimulacao, fila, destino));
-                        },
-                        () -> {
-                            escalonador.agenda(geradorDeEventos.novaSaida(tempoSimulacao, fila));
-                        });
+                        (destino) -> escalonador.agenda(geradorDeEventos.novaPassagem(tempoSimulacao, fila, destino)),
+                        () -> escalonador.agenda(geradorDeEventos.novaSaida(tempoSimulacao, fila)));
     }
 
     private void contabilizaTempo(Collection<Fila> filas, Float instanteEvento) {
