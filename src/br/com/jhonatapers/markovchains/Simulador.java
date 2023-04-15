@@ -73,6 +73,7 @@ public class Simulador {
     }
 
     private void saida(Saida saida) {
+        
         contabilizaTempo(filas, saida.getInstanteEvento());
 
         saida.getOrigem().estadoAtualMenosUm();

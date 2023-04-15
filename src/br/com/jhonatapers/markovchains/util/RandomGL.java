@@ -23,7 +23,7 @@ public class RandomGL {
     }
 
     public Float nextRandom() {
-        return Float.parseFloat(random(seed).toString()) / Float.parseFloat(M.toString()) * 1;
+        return Float.parseFloat(random(seed).toString()) / Float.parseFloat(M.toString());
     }
 
     private Long random(Long seed) {
