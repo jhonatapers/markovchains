@@ -7,6 +7,7 @@ public record FilaVO(String identificador,
         Integer capacidade,
         IntervaloVO saida,
         IntervaloVO entrada,
+        Float primeira_entrada,
         Collection<TransicaoVO> transicoes) {
 
 }

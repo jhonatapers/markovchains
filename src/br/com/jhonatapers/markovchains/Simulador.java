@@ -60,11 +60,9 @@ public class Simulador {
         contabilizaTempo(filas, passagem.getInstanteEvento());
 
         passagem.getOrigem().estadoAtualMenosUm();
-        if (passagem.getOrigem().getEstadoAtual() >= passagem.getOrigem().getK()) {
+        if (passagem.getOrigem().getEstadoAtual() >= passagem.getOrigem().getK())
             agendaSaidaOuPassagem(passagem.getOrigem());
-        }
 
-        passagem.getDestino().estadoAtualMaisUm();
         if (passagem.getDestino().getEstadoAtual() <= passagem.getDestino().getK()) {
             passagem.getDestino().estadoAtualMaisUm();
             if (passagem.getDestino().getEstadoAtual() <= passagem.getDestino().getC())
@@ -72,28 +70,27 @@ public class Simulador {
         } else {
             passagem.getDestino().perdaMaisUm();
         }
-
     }
 
     private void saida(Saida saida) {
         contabilizaTempo(filas, saida.getInstanteEvento());
 
-        saida.getOrigem().estadoAtualMenosUm();
+        if (saida.getOrigem().getIdentificador().equals("FILA2"))
+            System.out.println("AHAM");
 
-        if (saida.getOrigem().getEstadoAtual() >= saida.getOrigem().getC()) {
+        saida.getOrigem().estadoAtualMenosUm();
+        if (saida.getOrigem().getEstadoAtual() >= saida.getOrigem().getC())
             agendaSaidaOuPassagem(saida.getOrigem());
-            escalonador.agenda(geradorDeEventos.novaSaida(tempoSimulacao, saida.getOrigem()));
-        }
     }
 
     private void agendaSaidaOuPassagem(Fila fila) {
         sorteio.proximaFila(fila.getTransicoes())
                 .ifPresentOrElse(
                         (destino) -> {
-                            geradorDeEventos.novaPassagem(tempoSimulacao, fila, destino);
+                            escalonador.agenda(geradorDeEventos.novaPassagem(tempoSimulacao, fila, destino));
                         },
                         () -> {
-                            geradorDeEventos.novaSaida(tempoSimulacao, fila);
+                            escalonador.agenda(geradorDeEventos.novaSaida(tempoSimulacao, fila));
                         });
     }
 

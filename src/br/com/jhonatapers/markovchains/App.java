@@ -18,7 +18,7 @@ public class App {
 
         LeitorConfiguracao leitor = new LeitorConfiguracao();
 
-        String fileName = "X:\\PUCRS\\Simulacao de metodos analiticos\\markovchains\\exemplo.json";
+        String fileName = "D:\\Local Workspace\\PUCRS\\Simulacao de metodos analiticos\\markovchains\\exemplo.json";
         ConfigVO config = leitor.le(fileName);
 
         config.simulacoes()
@@ -61,7 +61,7 @@ public class App {
                         Collection<Entrada> entradas = simulacao.filas()
                                 .stream()
                                 .filter(fila -> fila.entrada() != null)
-                                .map(entrada -> new Entrada(entrada.entrada().minimo(),
+                                .map(entrada -> new Entrada(entrada.primeira_entrada(),
                                         filas.stream().filter(
                                                 fila -> fila.getIdentificador().equals(entrada.identificador()))
                                                 .findFirst().get()))
