@@ -2,7 +2,7 @@
     "simulacoes": [
         {
             "media_de": 5,
-            "execucoes": 14,
+            "execucoes": 100000,
             "filas": [
                 {
                     "identificador": "FILA1",
