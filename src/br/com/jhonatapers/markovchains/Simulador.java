@@ -60,7 +60,7 @@ public class Simulador {
         contabilizaTempo(filas, passagem.getInstanteEvento());
 
         passagem.getOrigem().estadoAtualMenosUm();
-        if (passagem.getOrigem().getEstadoAtual() >= passagem.getOrigem().getK())
+        if (passagem.getOrigem().getEstadoAtual() >= passagem.getOrigem().getC())
             agendaSaidaOuPassagem(passagem.getOrigem());
 
         if (passagem.getDestino().getEstadoAtual() < passagem.getDestino().getK()) {
