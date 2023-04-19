@@ -79,12 +79,20 @@ public class Fila {
         return estadosFila;
     }
 
+    public void setEstadosFila(Float[] estadosFila) {
+        this.estadosFila = estadosFila;
+    }
+
     public void perdaMaisUm() {
         this.perdas++;
     }
 
     public Long getPerdas() {
         return perdas;
+    }
+
+    public void setPerdas(Long perdas){
+        this.perdas = perdas;
     }
 
 }

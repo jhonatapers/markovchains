@@ -1,7 +1,7 @@
 {
     "simulacoes": [
         {
-            "media_de": 5,
+            "simulacoes": 5,
             "execucoes": 100000,
             "filas": [
                 {

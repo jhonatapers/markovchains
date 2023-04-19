@@ -2,7 +2,7 @@ package br.com.jhonatapers.markovchains.vo;
 
 import java.util.Collection;
 
-public record SimulacaoVO(Integer media_de,
+public record SimulacaoVO(Integer simulacoes,
                 Long execucoes,
                 Collection<FilaVO> filas) {
 

@@ -2,7 +2,9 @@ package br.com.jhonatapers.markovchains;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,7 +20,7 @@ public class App {
 
         LeitorConfiguracao leitor = new LeitorConfiguracao();
 
-        String fileName = "D:\\Local Workspace\\PUCRS\\Simulacao de metodos analiticos\\markovchains\\config.json";
+        String fileName = "config.json";
         ConfigVO config = leitor.le(fileName);
 
         config.simulacoes()
@@ -26,9 +28,9 @@ public class App {
                 .forEach(simulacao -> {
 
                     Float tempoSimulacao = 0f;
-                    Collection<Collection<Fila>> listaDeListasDeFilas = new ArrayList<Collection<Fila>>();
+                    Collection<Collection<Fila>> simulacoes = new ArrayList<Collection<Fila>>();
 
-                    for (int i = 0; i < simulacao.media_de(); i++) {
+                    for (int i = 0; i < simulacao.simulacoes(); i++) {
 
                         Set<Fila> filas = simulacao.filas()
                                 .stream()
@@ -78,35 +80,67 @@ public class App {
 
                         simulador.run();
 
-                        listaDeListasDeFilas.add(filas);
+                        simulacoes.add(filas);
                         tempoSimulacao += simulador.getTempoSimulacao();
                     }
 
-                    for (Collection<Fila> listaDeFilas : listaDeListasDeFilas) {
-
-                        System.out.println("**************************************************");
-
+                    Map<String,Fila> mediaFilasSimulacoes = new HashMap<>();
+                    for (Collection<Fila> listaDeFilas : simulacoes) {
                         for (Fila fila : listaDeFilas) {
+                            if(mediaFilasSimulacoes.containsKey(fila.getIdentificador())){
 
-                            System.out.println("--------------");
-                            System.out.println(fila.getIdentificador());
-                            System.out.println("--------------");
+                                Fila novaFila = mediaFilasSimulacoes.get(fila.getIdentificador());
 
-                            System.out.println(
-                                    String.format("Perdas: %s", String.valueOf(fila.getPerdas())));
+                                Float[] novosEstadosFila = new Float[novaFila.getEstadosFila().length];
+                                for (int i = 0; i < novaFila.getEstadosFila().length; i++) {
+                                    novosEstadosFila[i] = novaFila.getEstadosFila()[i] + fila.getEstadosFila()[i];
+                                }
 
-                            for (int i = 0; i < fila.getEstadosFila().length; i++) {
-                                System.out.println(String.format("Estado %s (%s Porcentagem) -> %s min.", i,
-                                        String.valueOf(fila.getEstadosFila()[i] / tempoSimulacao * 100),
-                                        String.valueOf(fila.getEstadosFila()[i])));
+                                novaFila.setEstadosFila(novosEstadosFila);
+                                novaFila.setPerdas(novaFila.getPerdas() + fila.getPerdas());
+
+                                mediaFilasSimulacoes.put(novaFila.getIdentificador(), novaFila);
                             }
+                            else {
+                                    mediaFilasSimulacoes.put(fila.getIdentificador(), fila);
+                            }
+                                
                         }
-
                     }
 
-                    System.out.println(String.format("Tempo de simulação: %s", String.valueOf(tempoSimulacao)));
+                    for (Fila fila : mediaFilasSimulacoes.values()) {
 
-                });
+                        System.out.println(String.format("\n/// ------------ [ %s ] ------------ ///\n", fila.getIdentificador()));
 
+                        System.out.println(" ESTADO  |      TEMPO      |     PORCENTAGEM ");
+                        for (int i = 0; i < fila.getK()+1; i++){
+                            System.out.println(String.format("%s | %s | %s",
+                                    alinharString(Integer.toString(i),8),
+                                    alinharString(Float.toString(fila.getEstadosFila()[i]/simulacoes.size()),15),
+                                    alinharString(((fila.getEstadosFila()[i]/simulacoes.size()) / tempoSimulacao * 100)+"%",20)
+                            ));
+                        }
+                        System.out.println(String.format("\nPERDAS: %s", fila.getPerdas()/simulacoes.size()));
+                    }
+
+                        System.out.println(String.format("\nTEMPO DE SIMULAÇÃO: %s\n", tempoSimulacao / simulacoes.size()));
+                }
+        );
+
+    }
+
+    private static String alinharString(String s, int size) {
+        if (s == null || size <= s.length())
+            return s;
+
+        StringBuilder sb = new StringBuilder(size);
+        for (int i = 0; i < (size - s.length()) / 2; i++) {
+            sb.append(' ');
+        }
+        sb.append(s);
+        while (sb.length() < size) {
+            sb.append(' ');
+        }
+        return sb.toString();
     }
 }
