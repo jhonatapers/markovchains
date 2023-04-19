@@ -117,7 +117,7 @@ public class App {
                             System.out.println(String.format("%s | %s | %s",
                                     alinharString(Integer.toString(i),8),
                                     alinharString(Float.toString(fila.getEstadosFila()[i]/simulacoes.size()),15),
-                                    alinharString(((fila.getEstadosFila()[i]/simulacoes.size()) / tempoSimulacao * 100)+"%",20)
+                                    alinharString(((fila.getEstadosFila()[i]/simulacoes.size()) / (tempoSimulacao / simulacoes.size()) * 100)+"%",20)
                             ));
                         }
                         System.out.println(String.format("\nPERDAS: %s", fila.getPerdas()/simulacoes.size()));
