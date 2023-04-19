@@ -1,7 +1,7 @@
 {
     "simulacoes": [
         {
-            "simulacoes": 5,
+            "simulacoes": 1,
             "execucoes": 100000,
             "filas": [
                 {

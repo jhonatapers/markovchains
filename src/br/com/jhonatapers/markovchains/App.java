@@ -116,14 +116,14 @@ public class App {
                         for (int i = 0; i < fila.getK()+1; i++){
                             System.out.println(String.format("%s | %s | %s",
                                     alinharString(Integer.toString(i),8),
-                                    alinharString(Float.toString(fila.getEstadosFila()[i]/simulacoes.size()),15),
-                                    alinharString(((fila.getEstadosFila()[i]/simulacoes.size()) / (tempoSimulacao / simulacoes.size()) * 100)+"%",20)
+                                    alinharString(Float.toString(fila.getEstadosFila()[i]/simulacao.simulacoes()),15),
+                                    alinharString(((fila.getEstadosFila()[i]/simulacao.simulacoes()) / (tempoSimulacao / simulacao.simulacoes()) * 100)+"%",20)
                             ));
                         }
-                        System.out.println(String.format("\nPERDAS: %s", fila.getPerdas()/simulacoes.size()));
+                        System.out.println(String.format("\nPERDAS: %s", fila.getPerdas()/simulacao.simulacoes()));
                     }
 
-                        System.out.println(String.format("\nTEMPO DE SIMULAÇÃO: %s\n", tempoSimulacao / simulacoes.size()));
+                        System.out.println(String.format("\nTEMPO DE SIMULAÇÃO: %s\n", tempoSimulacao / simulacao.simulacoes()));
                 }
         );
 
