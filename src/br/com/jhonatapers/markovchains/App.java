@@ -82,27 +82,29 @@ public class App {
                         tempoSimulacao += simulador.getTempoSimulacao();
                     }
 
-                    tempoSimulacao = 0f;
-                    listaDeListasDeFilas
-                            .stream()
-                            .forEach(listaDeFilas -> {
-                                listaDeFilas
-                                        .stream()
-                                        .forEach(fila -> {
-                                            System.out.println("--------------");
-                                            System.out.println(fila.getIdentificador());
-                                            System.out.println("--------------");
+                    for (Collection<Fila> listaDeFilas : listaDeListasDeFilas) {
 
-                                            System.out.println(
-                                                    String.format("Perdas: %s", String.valueOf(fila.getPerdas())));
+                        System.out.println("**************************************************");
 
-                                            for (int i = 0; i < fila.getEstadosFila().length; i++) {
-                                                System.out.println(String.format("Estado %s -> %s min.", i,
-                                                        String.valueOf(fila.getEstadosFila()[i])));
-                                            }
+                        for (Fila fila : listaDeFilas) {
 
-                                        });
-                            });
+                            System.out.println("--------------");
+                            System.out.println(fila.getIdentificador());
+                            System.out.println("--------------");
+
+                            System.out.println(
+                                    String.format("Perdas: %s", String.valueOf(fila.getPerdas())));
+
+                            for (int i = 0; i < fila.getEstadosFila().length; i++) {
+                                System.out.println(String.format("Estado %s (%s Porcentagem) -> %s min.", i,
+                                        String.valueOf(fila.getEstadosFila()[i] / tempoSimulacao * 100),
+                                        String.valueOf(fila.getEstadosFila()[i])));
+                            }
+                        }
+
+                    }
+
+                    System.out.println(String.format("Tempo de simulação: %s", String.valueOf(tempoSimulacao)));
 
                 });
 
