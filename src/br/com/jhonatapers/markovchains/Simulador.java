@@ -18,7 +18,7 @@ public class Simulador {
     private final GeradorDeEventos geradorDeEventos;
     private final Long qtdSimulacoes;
 
-    public Float tempoSimulacao;
+    private Float tempoSimulacao;
 
     public Simulador(Collection<Fila> filas,
             Collection<Entrada> entradasIniciais,
@@ -60,41 +60,32 @@ public class Simulador {
         contabilizaTempo(filas, passagem.getInstanteEvento());
 
         passagem.getOrigem().estadoAtualMenosUm();
-        if (passagem.getOrigem().getEstadoAtual() >= passagem.getOrigem().getK()) {
+        if (passagem.getOrigem().getEstadoAtual() >= passagem.getOrigem().getC())
             agendaSaidaOuPassagem(passagem.getOrigem());
-        }
 
-        passagem.getDestino().estadoAtualMaisUm();
-        if (passagem.getDestino().getEstadoAtual() <= passagem.getDestino().getK()) {
+        if (passagem.getDestino().getEstadoAtual() < passagem.getDestino().getK()) {
             passagem.getDestino().estadoAtualMaisUm();
             if (passagem.getDestino().getEstadoAtual() <= passagem.getDestino().getC())
                 agendaSaidaOuPassagem(passagem.getDestino());
         } else {
             passagem.getDestino().perdaMaisUm();
         }
-
     }
 
     private void saida(Saida saida) {
+        
         contabilizaTempo(filas, saida.getInstanteEvento());
 
         saida.getOrigem().estadoAtualMenosUm();
-
-        if (saida.getOrigem().getEstadoAtual() >= saida.getOrigem().getC()) {
+        if (saida.getOrigem().getEstadoAtual() >= saida.getOrigem().getC())
             agendaSaidaOuPassagem(saida.getOrigem());
-            escalonador.agenda(geradorDeEventos.novaSaida(tempoSimulacao, saida.getOrigem()));
-        }
     }
 
     private void agendaSaidaOuPassagem(Fila fila) {
         sorteio.proximaFila(fila.getTransicoes())
                 .ifPresentOrElse(
-                        (destino) -> {
-                            geradorDeEventos.novaPassagem(tempoSimulacao, fila, destino);
-                        },
-                        () -> {
-                            geradorDeEventos.novaSaida(tempoSimulacao, fila);
-                        });
+                        (destino) -> escalonador.agenda(geradorDeEventos.novaPassagem(tempoSimulacao, fila, destino)),
+                        () -> escalonador.agenda(geradorDeEventos.novaSaida(tempoSimulacao, fila)));
     }
 
     private void contabilizaTempo(Collection<Fila> filas, Float instanteEvento) {
@@ -131,6 +122,10 @@ public class Simulador {
             count++;
         }
 
+    }
+
+    public Float getTempoSimulacao() {
+        return tempoSimulacao;
     }
 
 }

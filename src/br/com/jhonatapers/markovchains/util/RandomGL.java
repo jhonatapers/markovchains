@@ -27,7 +27,6 @@ public class RandomGL {
     }
 
     private Long random(Long seed) {
-
         this.seed = (a * seed + c) % M;
         return this.seed;
     }

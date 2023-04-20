@@ -18,7 +18,7 @@ public class GeradorDeEventos {
     }
 
     public Passagem novaPassagem(Float tempoAtual, Fila origem, Fila destino) {
-        return new Passagem(tempoAtual, origem, destino);
+        return new Passagem(tempoAtual + sorteio.instante(origem.getIntervaloSaida()), origem, destino);
     }
 
     public Saida novaSaida(Float tempoAtual, Fila origem) {

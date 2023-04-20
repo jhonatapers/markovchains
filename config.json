@@ -1,0 +1,44 @@
+{
+    "simulacoes": [
+        {
+            "simulacoes": 1,
+            "execucoes": 100000,
+            "filas": [
+                {
+                    "identificador": "FILA1",
+                    "servidores": 2,
+                    "capacidade": 3,
+                    "saida": {
+                        "minimo": 2,
+                        "maximo": 5
+                    },
+                    "entrada": {
+                        "minimo": 2,
+                        "maximo": 3
+                    },
+                    "primeira_entrada": 2.5,
+                    "transicoes": [
+                        {
+                            "probabilidade": 1,
+                            "destino": "FILA2"
+                        }
+                    ]
+                },
+                {
+                    "identificador": "FILA2",
+                    "servidores": 1,
+                    "capacidade": 3,
+                    "saida": {
+                        "minimo": 3,
+                        "maximo": 5
+                    },
+                    "transicoes": [
+                        {
+                            "probabilidade": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

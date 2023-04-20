@@ -17,21 +17,20 @@ public class Sorteio {
 
     public Optional<Fila> proximaFila(List<Transicao> transicoes) {
 
-
         Float valorRandom = random.nextRandom();
         Float rangePorcentagem = 0F;
 
         for (Transicao transicao : transicoes) {
             rangePorcentagem += transicao.getProbabilidade();
-            if(valorRandom <= rangePorcentagem) return transicao.getDestino();
+            if (valorRandom <= rangePorcentagem)
+                return transicao.getDestino();
         }
 
         return Optional.empty();
-
     }
 
     public Float instante(IntervaloVO intervalo) {
-        return converte(intervalo.getMinimo(), intervalo.getMaximo(), random.nextRandom());
+        return converte(intervalo.minimo(), intervalo.maximo(), random.nextRandom());
     }
 
     // U(A, B) = (B – A) x U(0, 1) + A
