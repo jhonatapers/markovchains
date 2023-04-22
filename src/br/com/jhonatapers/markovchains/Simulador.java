@@ -90,7 +90,6 @@ public class Simulador {
         } else {
             escalonador.agenda(geradorDeEventos.novaSaida(tempoSimulacao, fila));
         }
-
     }
 
     private void contabilizaTempo(Collection<Fila> filas, Float instanteEvento) {

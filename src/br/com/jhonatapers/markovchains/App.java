@@ -34,6 +34,7 @@ public class App {
 
                     for (int i = 0; i < simulacao.qtdSimulacoes(); i++) {
 
+
                         Set<Fila> filas = simulacao.filas()
                                 .stream()
                                 .map(fila -> new Fila(fila.identificador(),
@@ -90,7 +91,6 @@ public class App {
                     }
 
                     Map<String,Fila> mediaFilasSimulacoes = new HashMap<>();
-
                     for (Collection<Fila> listaDeFilas : simulacoes) {
                         for (Fila fila : listaDeFilas) {
                             if(mediaFilasSimulacoes.containsKey(fila.getIdentificador())){
