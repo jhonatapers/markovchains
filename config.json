@@ -1,40 +1,63 @@
 {
     "simulacoes": [
         {
-            "simulacoes": 1,
+            "qtdSimulacoes": 1,
             "execucoes": 100000,
             "filas": [
                 {
                     "identificador": "FILA1",
-                    "servidores": 2,
-                    "capacidade": 3,
-                    "saida": {
-                        "minimo": 2,
-                        "maximo": 5
-                    },
+                    "servidores": 1,
                     "entrada": {
-                        "minimo": 2,
-                        "maximo": 3
+                        "minimo": 1.0,
+                        "maximo": 4.0
                     },
-                    "primeira_entrada": 2.5,
+                    "saida": {
+                        "minimo": 1,
+                        "maximo": 1.5
+                    },
+                    "primeira_entrada": 1.0,
                     "transicoes": [
                         {
-                            "probabilidade": 1,
+                            "probabilidade": 0.8,
                             "destino": "FILA2"
+                        },
+                        {
+                            "probabilidade": 0.2,
+                            "destino": "FILA3"
                         }
                     ]
                 },
                 {
                     "identificador": "FILA2",
-                    "servidores": 1,
-                    "capacidade": 3,
+                    "servidores": 3,
+                    "capacidade": 5,
                     "saida": {
-                        "minimo": 3,
-                        "maximo": 5
+                        "minimo": 5.0,
+                        "maximo": 10.0
                     },
                     "transicoes": [
                         {
-                            "probabilidade": 1
+                            "probabilidade": 0.3,
+                            "destino": "FILA1"
+                        },
+                        {
+                            "probabilidade": 0.5,
+                            "destino": "FILA3"
+                        }
+                    ]
+                },
+                {
+                    "identificador": "FILA3",
+                    "servidores": 2,
+                    "capacidade": 8,
+                    "saida": {
+                        "minimo": 10.0,
+                        "maximo": 20.0
+                    },
+                    "transicoes": [
+                        {
+                            "probabilidade": 0.7,
+                            "destino": "FILA2"
                         }
                     ]
                 }
