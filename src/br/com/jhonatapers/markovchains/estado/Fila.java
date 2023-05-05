@@ -1,6 +1,8 @@
 package br.com.jhonatapers.markovchains.estado;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.com.jhonatapers.markovchains.Transicao;
 import br.com.jhonatapers.markovchains.vo.IntervaloVO;
@@ -16,7 +18,7 @@ public class Fila {
 
     private int estadoAtual = 0;
     private Long perdas = 0L;
-    private Float[] estadosFila;
+    private Map<Integer,Float> estadosFila;
 
     public Fila(String identificador,
             int c,
@@ -26,11 +28,10 @@ public class Fila {
 
         this.identificador = identificador;
         this.c = c;
-        this.k = k;
-        this.estadosFila = new Float[k + 1];
-        for (int i = 0; i < k + 1; i++)
-            this.estadosFila[i] = 0F;
 
+        this.k = k;
+        this.estadosFila = new HashMap<Integer,Float>();
+    
         this.intervaloEntrada = entrada;
         this.intervaloSaida = saida;
     }
@@ -75,11 +76,11 @@ public class Fila {
         this.estadoAtual++;
     }
 
-    public Float[] getEstadosFila() {
+    public Map<Integer,Float> getEstadosFila() {
         return estadosFila;
     }
 
-    public void setEstadosFila(Float[] estadosFila) {
+    public void setEstadosFila(Map<Integer,Float> estadosFila) {
         this.estadosFila = estadosFila;
     }
 

@@ -1,5 +1,7 @@
 package br.com.jhonatapers.markovchains;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,13 +32,14 @@ public class App {
                     Float tempoSimulacao = 0f;
                     Collection<Collection<Fila>> simulacoes = new ArrayList<Collection<Fila>>();
 
-                    for (int i = 0; i < simulacao.simulacoes(); i++) {
+                    for (int i = 0; i < simulacao.qtdSimulacoes(); i++) {
+
 
                         Set<Fila> filas = simulacao.filas()
                                 .stream()
                                 .map(fila -> new Fila(fila.identificador(),
                                         fila.servidores(),
-                                        fila.capacidade(),
+                                        (fila.capacidade() != null ? fila.capacidade() : Integer.MAX_VALUE),
                                         fila.saida(),
                                         fila.entrada()))
                                 .collect(Collectors.toSet());
@@ -69,7 +72,7 @@ public class App {
                                                 .findFirst().get()))
                                 .collect(Collectors.toList());
 
-                        Sorteio sorteio = new Sorteio(new RandomGL());
+                        Sorteio sorteio = new Sorteio(new RandomGL(simulacao.execucoes()));
 
                         Simulador simulador = new Simulador(filas,
                                 entradas,
@@ -78,7 +81,10 @@ public class App {
                                 new GeradorDeEventos(sorteio),
                                 simulacao.execucoes());
 
-                        simulador.run();
+                        try {
+                            simulador.run();
+                        } catch (Exception e) {
+                        }
 
                         simulacoes.add(filas);
                         tempoSimulacao += simulador.getTempoSimulacao();
@@ -91,9 +97,10 @@ public class App {
 
                                 Fila novaFila = mediaFilasSimulacoes.get(fila.getIdentificador());
 
-                                Float[] novosEstadosFila = new Float[novaFila.getEstadosFila().length];
-                                for (int i = 0; i < novaFila.getEstadosFila().length; i++) {
-                                    novosEstadosFila[i] = novaFila.getEstadosFila()[i] + fila.getEstadosFila()[i];
+                                Map<Integer,Float> novosEstadosFila = new HashMap<Integer,Float>();
+
+                                for (int i = 0; i < novaFila.getEstadosFila().size(); i++) {
+                                    novosEstadosFila.put(i, novaFila.getEstadosFila().get(i) + fila.getEstadosFila().get(i));
                                 }
 
                                 novaFila.setEstadosFila(novosEstadosFila);
@@ -108,22 +115,25 @@ public class App {
                         }
                     }
 
+                    DecimalFormat df = new DecimalFormat("#.##");
+                    df.setRoundingMode(RoundingMode.DOWN); 
                     for (Fila fila : mediaFilasSimulacoes.values()) {
 
                         System.out.println(String.format("\n/// ------------ [ %s ] ------------ ///\n", fila.getIdentificador()));
 
                         System.out.println(" ESTADO  |      TEMPO      |     PORCENTAGEM ");
-                        for (int i = 0; i < fila.getK()+1; i++){
+
+                        for (int i = 0; i < fila.getEstadosFila().size(); i++){
                             System.out.println(String.format("%s | %s | %s",
                                     alinharString(Integer.toString(i),8),
-                                    alinharString(Float.toString(fila.getEstadosFila()[i]/simulacao.simulacoes()),15),
-                                    alinharString(((fila.getEstadosFila()[i]/simulacao.simulacoes()) / (tempoSimulacao / simulacao.simulacoes()) * 100)+"%",20)
+                                    alinharString(Float.toString(fila.getEstadosFila().get(i)/simulacao.qtdSimulacoes()),15),
+                                    alinharString(df.format((fila.getEstadosFila().get(i)/simulacao.qtdSimulacoes()) / (tempoSimulacao / simulacao.qtdSimulacoes()) * 100)+"%",20)
                             ));
                         }
-                        System.out.println(String.format("\nPERDAS: %s", fila.getPerdas()/simulacao.simulacoes()));
+                        System.out.println(String.format("\nPERDAS: %s", fila.getPerdas()/simulacao.qtdSimulacoes()));
                     }
 
-                        System.out.println(String.format("\nTEMPO DE SIMULAÇÃO: %s\n", tempoSimulacao / simulacao.simulacoes()));
+                        System.out.println(String.format("\nTEMPO DE SIMULAÇÃO: %s\n", tempoSimulacao / simulacao.qtdSimulacoes()));
                 }
         );
 

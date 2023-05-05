@@ -37,7 +37,7 @@ public class Simulador {
         this.tempoSimulacao = 0F;
     }
 
-    private void entrada(Entrada entrada) {
+    private void entrada(Entrada entrada) throws Exception {
 
         contabilizaTempo(filas, entrada.getInstanteEvento());
 
@@ -55,7 +55,7 @@ public class Simulador {
         escalonador.agenda(geradorDeEventos.novaEntrada(tempoSimulacao, entrada.getDestino()));
     }
 
-    private void passagem(Passagem passagem) {
+    private void passagem(Passagem passagem) throws Exception {
 
         contabilizaTempo(filas, passagem.getInstanteEvento());
 
@@ -72,7 +72,7 @@ public class Simulador {
         }
     }
 
-    private void saida(Saida saida) {
+    private void saida(Saida saida) throws Exception {
         
         contabilizaTempo(filas, saida.getInstanteEvento());
 
@@ -81,32 +81,33 @@ public class Simulador {
             agendaSaidaOuPassagem(saida.getOrigem());
     }
 
-    private void agendaSaidaOuPassagem(Fila fila) {
-        sorteio.proximaFila(fila.getTransicoes())
-                .ifPresentOrElse(
-                        (destino) -> escalonador.agenda(geradorDeEventos.novaPassagem(tempoSimulacao, fila, destino)),
-                        () -> escalonador.agenda(geradorDeEventos.novaSaida(tempoSimulacao, fila)));
+    private void agendaSaidaOuPassagem(Fila fila) throws Exception {
+        
+        Fila destino = sorteio.proximaFila(fila.getTransicoes()).orElse(null);
+
+        if(destino != null){
+            escalonador.agenda(geradorDeEventos.novaPassagem(tempoSimulacao, fila, destino));
+        } else {
+            escalonador.agenda(geradorDeEventos.novaSaida(tempoSimulacao, fila));
+        }
     }
 
     private void contabilizaTempo(Collection<Fila> filas, Float instanteEvento) {
 
-        filas
-                .stream()
-                .forEach(fila -> contabilizaEstadosFila(fila, instanteEvento));
+        filas.stream().forEach(fila -> contabilizaEstadosFila(fila, instanteEvento));
 
         this.tempoSimulacao = instanteEvento;
     }
 
     private void contabilizaEstadosFila(Fila fila, float instanteEvento) {
-        fila.getEstadosFila()[fila.getEstadoAtual()] += instanteEvento - tempoSimulacao;
+        fila.getEstadosFila().put(fila.getEstadoAtual(), fila.getEstadosFila().getOrDefault(fila.getEstadoAtual(),0F) + (instanteEvento - tempoSimulacao));
     }
 
-    public void run() {
+    public void run() throws Exception {
 
         Long count = 0L;
 
-        entradasIniciais
-                .forEach(entradaInicial -> escalonador.agenda(entradaInicial));
+        entradasIniciais.forEach(entradaInicial -> escalonador.agenda(entradaInicial));
 
         while (count < qtdSimulacoes) {
 

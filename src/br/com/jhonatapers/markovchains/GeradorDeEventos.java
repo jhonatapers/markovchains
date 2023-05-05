@@ -13,15 +13,15 @@ public class GeradorDeEventos {
         this.sorteio = sorteio;
     }
 
-    public Entrada novaEntrada(Float tempoAtual, Fila destino) {
+    public Entrada novaEntrada(Float tempoAtual, Fila destino) throws Exception {
         return new Entrada(tempoAtual + sorteio.instante(destino.getIntervaloEntrada()), destino);
     }
 
-    public Passagem novaPassagem(Float tempoAtual, Fila origem, Fila destino) {
+    public Passagem novaPassagem(Float tempoAtual, Fila origem, Fila destino) throws Exception {
         return new Passagem(tempoAtual + sorteio.instante(origem.getIntervaloSaida()), origem, destino);
     }
 
-    public Saida novaSaida(Float tempoAtual, Fila origem) {
+    public Saida novaSaida(Float tempoAtual, Fila origem) throws Exception {
         return new Saida(tempoAtual + sorteio.instante(origem.getIntervaloSaida()), origem);
     }
 

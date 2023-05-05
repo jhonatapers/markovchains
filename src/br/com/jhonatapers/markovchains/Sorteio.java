@@ -15,7 +15,7 @@ public class Sorteio {
         this.random = random;
     }
 
-    public Optional<Fila> proximaFila(List<Transicao> transicoes) {
+    public Optional<Fila> proximaFila(List<Transicao> transicoes) throws Exception {
 
         Float valorRandom = random.nextRandom();
         Float rangePorcentagem = 0F;
@@ -29,7 +29,7 @@ public class Sorteio {
         return Optional.empty();
     }
 
-    public Float instante(IntervaloVO intervalo) {
+    public Float instante(IntervaloVO intervalo) throws Exception {
         return converte(intervalo.minimo(), intervalo.maximo(), random.nextRandom());
     }
 
